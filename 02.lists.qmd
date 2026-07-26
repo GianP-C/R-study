@@ -1,0 +1,138 @@
+---
+title: "Lists"
+author: "Giancarlo Prioli Cardozo"
+format: html
+editor: visual
+---
+
+#lists
+
+lists can store objects of different types. They are commonly used to represent datasets, model outputs, and more complex structures.
+
+##creating lists
+
+lists are created with the `list()` function
+
+```{r}
+#simplified patient record
+patient <- list(
+  id = 101,
+  age = 64,
+  sex = "Female",
+  hypertension = TRUE,
+  glucose = c(118, 121, 125, 119),
+  medications = c("Losartan", "Metformin")
+)
+```
+
+##basic properties
+
+these functions describe the structure and components of a list
+
+```{r}
+str(patient)
+names(patient)
+length(patient)
+```
+
+##accessing elements
+
+elements can be accessed using `$`, `[[]]`, or numerical indexing
+
+```{r}
+patient$age
+patient[["sex"]]
+patient[[5]]
+
+#mean glucose level
+mean(patient$glucose)
+```
+
+##modifying lists
+
+adding, updating, and removing elements in a list
+
+```{r}
+# Adding information
+patient$diagnosis <- "Type 2 Diabetes"
+
+# Updating values
+patient$age <- 65
+
+# Removing an element
+patient$hypertension <- NULL
+```
+
+##nested lists
+
+lists can contain other lists
+
+```{r}
+#list of patients
+patients <- list(
+  list(id = 1, age = 45, glucose = 95),
+  list(id = 2, age = 61, glucose = 132),
+  list(id = 3, age = 54, glucose = 108)
+)
+
+#accessing nested values
+patients[[2]]$glucose
+```
+
+##extracting attributes
+
+using functions like `sapply()` to extract values across list items
+
+```{r}
+ages <- sapply(patients, function(x) x$age)
+glucose_levels <- sapply(patients, function(x) x$glucose)
+
+ages
+glucose_levels
+
+#summary statistics
+mean(ages)
+mean(glucose_levels)
+```
+
+##converting to data frame
+
+converting lists into data frames for analysis
+
+```{r}
+data <- data.frame(
+  id = sapply(patients, `[[`, "id"),
+  age = ages,
+  glucose = glucose_levels
+)
+
+data
+
+#risk classification
+data$risk <- ifelse(
+  data$glucose >= 126,
+  "High",
+  "Low"
+)
+
+data
+```
+
+##complex lists
+
+lists can store different types of objects, including data frames and summary metrics
+
+```{r}
+study <- list(
+  data = data,
+  mean_glucose = mean(data$glucose),
+  n_patients = nrow(data),
+  outcome = "glucose"
+)
+
+str(study)
+
+#accessing information
+study$mean_glucose
+study$data
+```

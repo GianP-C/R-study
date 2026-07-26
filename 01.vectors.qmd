@@ -1,0 +1,189 @@
+---
+title: "01.vectors"
+author: "Giancarlo Prioli Cardozo"
+format: html
+editor: visual
+---
+
+#vectors
+
+vectors are the most basic and fundamental data structure in R. Every element in a vector must have the same data type. Most operations in R are vectorized, meaning they are applied automatically to every element
+
+##creating vectors
+
+vectors are created with the `c()` function
+
+```{r}
+# Numeric vector
+heart_rate <- c(72, 81, 68, 95, 88, 76, 70, 91, 85, 79, 74, 83)
+
+# Character vector
+patient_group <- c("A", "B", "A", "B")
+
+# Logical vector
+critical <- c(FALSE, FALSE, FALSE, TRUE)
+```
+
+##basic properties
+
+these functions describe the structure of a vector
+
+```{r}
+class(heart_rate)
+typeof(heart_rate)
+length(heart_rate)
+str(heart_rate)
+```
+
+##summary statistics
+
+many statistical functions operate directly on numeric vectors
+
+```{r}
+mean(heart_rate)
+median(heart_rate)
+sd(heart_rate)
+range(heart_rate)
+summary(heart_rate)
+```
+
+##vectorized operations
+
+arithmetic operations are automatically applied to every element
+
+```{r}
+heart_rate + 5
+heart_rate * 1.10
+heart_rate - mean(heart_rate)
+```
+
+##logical comparisons
+
+logical expressions return a vector of `TRUE` and `FALSE`
+
+```{r}
+heart_rate > 80
+
+oxygen_saturation <- c(
+  98, 96, 99, 92, 95, 97,
+  99, 91, 94, 96, 98, 95
+)
+
+oxygen_saturation < 95
+```
+
+##indexing
+
+selecting elements by position
+
+```{r}
+heart_rate[1]
+
+heart_rate[c(2, 5, 8)]
+
+heart_rate[-1]
+```
+
+##filtering
+
+logical vectors can be used to filter observations
+
+```{r}
+heart_rate[heart_rate > 80]
+
+oxygen_saturation[oxygen_saturation >= 97]
+
+heart_rate[
+  heart_rate > 80 &
+  oxygen_saturation < 95
+]
+```
+
+##creating sequences
+
+useful functions for generating vectors
+
+```{r}
+1:12
+
+seq(0, 20, by = 5)
+
+rep(c("Day", "Night"), times = 6)
+```
+
+##named vectors
+
+names can be assigned to improve readability
+
+```{r}
+names(heart_rate) <- paste0("P", 1:12)
+
+heart_rate
+```
+
+##missing values
+
+missing values are represented by `NA`
+
+```{r}
+heart_rate[4] <- NA
+
+is.na(heart_rate)
+
+sum(is.na(heart_rate))
+
+mean(heart_rate, na.rm = TRUE)
+```
+
+missing values can be replaced
+
+```{r}
+heart_rate[is.na(heart_rate)] <-
+  median(heart_rate, na.rm = TRUE)
+
+heart_rate
+```
+
+##type coercion
+
+all elements in a vector must share the same type. R automatically coerces values when necessary
+
+```{r}
+mixed_vector <- c(1, 2, "3")
+
+mixed_vector
+
+typeof(mixed_vector)
+
+as.numeric(mixed_vector)
+
+as.character(heart_rate)
+```
+
+##useful functions
+
+commonly used functions when working with vectors
+
+```{r}
+which(heart_rate > 85)
+
+sort(heart_rate)
+
+unique(rep(c("Day", "Night"), times = 6))
+```
+
+##practice
+
+a small manually created dataset
+
+```{r}
+temperature <- c(
+  36.5, 36.8, 37.1, 38.2,
+  37.8, 36.7, 36.9, 38.5,
+  37.3, 36.6, 36.8, 37.0
+)
+
+alert <- heart_rate > 85 | temperature > 38
+
+alert
+```

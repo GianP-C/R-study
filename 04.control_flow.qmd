@@ -1,0 +1,124 @@
+---
+title: "control_flow"
+author: "Giancarlo Prioli Cardozo"
+format: html
+editor: visual
+---
+
+#control flow
+
+control flow statements determine the order in which code is executed. they allow for decision making and iteration over clinical datasets.
+
+##if statements
+
+executes a specific block of code only if a given condition is true
+
+```{r}
+patient_temp <- 38.5
+
+if (patient_temp > 38.0) {
+  print("Alert: Patient has a fever.")
+}
+```
+
+##if else statements
+
+provides an alternative action if the initial condition is FALSE
+
+```{r}
+oxygen_sat <- 93
+
+if (oxygen_sat >= 95) {
+  print("Oxygen levels are normal.")
+} else {
+  print("Warning: Administer oxygen.")
+}
+```
+
+##else if chains
+
+allows checking multiple conditional thresholds back to back
+
+```{r}
+systolic_bp <- 145
+
+if (systolic_bp < 120) {
+  print("Normal")
+} else if (systolic_bp < 130) {
+  print("Elevated")
+} else if (systolic_bp < 140) {
+  print("Stage 1 Hypertension")
+} else {
+  print("Stage 2 Hypertension")
+}
+```
+
+##vectorized ifelse
+
+`ifelse()` is useful because it evaluates a condition across a whole vector at once
+
+```{r}
+glucose_levels <- c(95, 110, 135, 88, 126)
+
+status <- ifelse(
+  glucose_levels >= 126, 
+  "Diabetes", 
+  "Normal/Pre-diabetes"
+)
+
+status
+```
+
+##for loops
+
+repeats a block of code for each element in a sequence, vector, or list
+
+```{r}
+patient_ids <- c("P01", "P02", "P03")
+
+for (id in patient_ids) {
+  message <- paste("Retrieving electronic health record for:", id)
+  print(message)
+}
+```
+
+##while loops
+
+repeats code as long as a condition remains true. useful when the number of iterations is unknown
+
+```{r}
+days_in_hospital <- 1
+recovery_score <- 40
+
+while (recovery_score < 80) {
+  recovery_score <- recovery_score + 15
+  days_in_hospital <- days_in_hospital + 1
+}
+
+days_in_hospital
+```
+
+##break and next
+
+`break` stops a loop completely, while `next` skips only the current iteration
+
+```{r}
+heart_rates <- c(70, 75, 150, 80, 85)
+
+#using break for critical events
+for (hr in heart_rates) {
+  if (hr > 120) {
+    print("Tachycardia detected. Stopping exercise test.")
+    break
+  }
+  print(paste("Monitoring HR:", hr))
+}
+
+#using next to ignore artifacts
+for (hr in heart_rates) {
+  if (hr > 120) {
+    next 
+  }
+  print(paste("Valid reading saved:", hr))
+}
+```

@@ -1,0 +1,118 @@
+---
+title: "functions"
+author: "Giancarlo Prioli Cardozo"
+format: html
+editor: visual
+---
+
+#functions
+
+functions are blocks of code that perform specific tasks. they help avoid repetition and make the analytical code more organized and readable
+
+##built-in functions
+
+R has many built-in functions for common calculations in health data
+
+```{r}
+weights_kg <- c(65, 72, 88, 54, 91)
+
+mean(weights_kg)
+median(weights_kg)
+round(mean(weights_kg), 1)
+```
+
+##creating basic functions
+
+you can create custom functions using the `function()` followed by the code block
+
+```{r}
+#Body Mass Index (BMI)
+calculate_bmi <- function(weight, height) {
+  bmi <- weight / (height^2)
+  return(bmi)
+}
+
+calculate_bmi(weight = 70, height = 1.75)
+```
+
+##default arguments
+
+you can set default values for arguments if they are not provided by the user
+
+```{r}
+#convert glucose from mmol/L to mg/dL
+convert_glucose <- function(value, multiply_by = 18) {
+  return(value * multiply_by)
+}
+
+convert_glucose(5.5) #default multiplier
+convert_glucose(5.5, multiply_by = 18.018) #uses molar mass
+```
+
+##returning values
+
+functions automatically return the last evaluated expression, but `return()` makes it explicit and can stop execution early
+
+```{r}
+assess_fever <- function(temp_c) {
+  if (is.na(temp_c)) {
+    return("Missing data")
+  }
+  
+  if (temp_c > 38.0) {
+    return("Fever")
+  }
+  
+  "Normal"
+}
+
+assess_fever(37.5)
+assess_fever(38.6)
+```
+
+##multiple returns
+
+if you need to return multiple values, you must store them in a list or vector
+
+```{r}
+patient_summary <- function(sbp, dbp) {
+  map <- dbp + (1/3) * (sbp - dbp)
+  pulse_pressure <- sbp - dbp
+  
+  list(
+    MAP = round(map, 1),
+    Pulse_Pressure = pulse_pressure
+  )
+}
+
+patient_summary(120, 80)
+```
+
+##scoping
+
+variables created inside a function are local and do not affect the global code
+
+```{r}
+heart_rate <- 72
+
+update_hr <- function(new_hr) {
+  heart_rate <- new_hr
+  return(heart_rate)
+}
+
+update_hr(90)
+
+#global variable remains unchanged
+heart_rate 
+```
+
+##anonymous functions
+
+short functions created on the fly, often used with `apply()` or `sapply()`
+
+```{r}
+patient_ages <- list(p1 = 45, p2 = 60, p3 = 33)
+
+#add 1y to every patient age
+sapply(patient_ages, function(age) age + 1)
+```
